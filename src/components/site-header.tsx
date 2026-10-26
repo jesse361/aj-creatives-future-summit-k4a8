@@ -58,15 +58,18 @@ export function SiteHeader({ brand, logoUrl }: { brand: string; logoUrl: string 
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-navy/95 text-white backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-[4.5rem] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
           {logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={logoUrl} alt="" className="h-8 w-8 object-contain" />
+            <img src={logoUrl} alt="" className="h-9 w-9 object-contain" />
           ) : (
-            <span className="grid h-8 w-8 place-items-center border border-gold text-[10px] font-semibold tracking-[0.14em] text-gold">WU</span>
+            <span className="grid h-10 w-10 place-items-center border border-gold text-[10px] font-semibold tracking-[0.14em] text-gold">WU</span>
           )}
-          <span className="font-display text-lg tracking-[0.18em]">{brand}</span>
+          <span className="flex flex-col leading-none">
+            <span className="font-display text-lg tracking-[0.22em]">{brand}</span>
+            <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-gold">Events & Conference Hub</span>
+          </span>
         </Link>
         <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
           {links.map((link) => (

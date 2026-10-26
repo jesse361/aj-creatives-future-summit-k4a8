@@ -47,12 +47,12 @@ async function SpeakerResults({ searchParams }: { searchParams: Promise<{ q?: st
       {filtered.length ? (
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((speaker) => (
-            <Link key={speaker.id} href={`/speakers/${speaker.slug}`} className="border border-line bg-white p-5">
-              <Portrait name={speaker.name} src={speaker.portrait} className="h-16 w-16 text-2xl text-navy" />
-              <div className="mt-4">{speaker.isDemonstration ? <DemoNote /> : null}</div>
-              <h2 className="mt-3 font-display text-3xl text-navy">{speaker.name}</h2>
-              <p className="text-sm text-ink-soft">{speaker.professionalTitle}{speaker.organization ? `, ${speaker.organization}` : ""}</p>
-              <p className="mt-3 line-clamp-3 text-sm leading-6 text-ink-soft">{speaker.biography}</p>
+            <Link key={speaker.id} href={`/speakers/${speaker.slug}`} className="group border border-line bg-white p-3 transition hover:border-navy">
+              <Portrait name={speaker.name} src={speaker.portrait} className="aspect-[3/4] bg-navy text-6xl text-gold" />
+              <div className="px-3 pt-4">{speaker.isDemonstration ? <DemoNote /> : null}</div>
+              <h2 className="mt-3 px-3 font-display text-3xl text-navy group-hover:text-electric">{speaker.name}</h2>
+              <p className="px-3 text-sm text-ink-soft">{speaker.professionalTitle}{speaker.organization ? `, ${speaker.organization}` : ""}</p>
+              <p className="mt-3 line-clamp-3 px-3 pb-4 text-sm leading-6 text-ink-soft">{speaker.biography}</p>
             </Link>
           ))}
         </div>

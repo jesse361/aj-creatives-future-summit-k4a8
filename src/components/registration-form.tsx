@@ -112,7 +112,7 @@ export function RegistrationForm({ events, initialEventId = "", initialTicketId 
           <fieldset className="grid gap-3">
             <legend className={labelClass}>Ticket</legend>
             {(event?.tickets ?? []).map((item) => (
-              <label key={item.id} className="grid gap-1 border border-line px-4 py-3">
+              <label key={item.id} className={`grid gap-1 border px-4 py-4 ${ticketTypeId === item.id ? "ticket-rail border-gold" : "border-line bg-white"}`}>
                 <span className="flex items-center justify-between gap-3">
                   <span className="flex items-center gap-2 font-medium">
                     <input type="radio" value={item.id} disabled={item.remaining < item.minimumQuantity} {...form.register("ticketTypeId")} />
@@ -159,11 +159,12 @@ export function RegistrationForm({ events, initialEventId = "", initialTicketId 
       ) : null}
 
       {step === 2 && event && ticket && review ? (
-        <div className="grid gap-3 text-sm leading-6">
-          <p className="font-display text-2xl text-navy">{event.title}</p>
+        <div className="ticket-rail grid gap-2 border border-line p-5 text-sm leading-6">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">Order review</p>
+          <p className="font-display text-3xl text-navy">{event.title}</p>
           <p>{ticket.name} × {quantity}</p>
           <p>Unit price {review.unit}</p>
-          <p className="text-lg">Total {review.total}</p>
+          <p className="border-t border-dashed border-gold/80 pt-3 font-display text-2xl text-navy">Total {review.total}</p>
           <p>{form.watch("fullName")} · {form.watch("email")}</p>
           {ticket.priceMinor > 0 && !paymentConfigured ? (
             <p className="bg-amber-50 px-3 py-3 text-amber-950">Paid checkout is not configured. Submitting will not confirm this ticket or take payment.</p>

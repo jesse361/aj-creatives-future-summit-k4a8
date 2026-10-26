@@ -37,7 +37,7 @@ export default async function AdminHome() {
       <p className="mt-2 text-sm text-ink-soft">Figures come from the database. Empty means nothing has been recorded yet.</p>
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {cards.map(([label, value]) => (
-          <article key={String(label)} className="border border-line bg-white p-4">
+          <article key={String(label)} className="border border-line border-t-2 border-t-gold bg-white p-4">
             <p className="text-xs uppercase tracking-[0.14em] text-mist">{label}</p>
             <p className="mt-2 font-display text-3xl">{value}</p>
           </article>

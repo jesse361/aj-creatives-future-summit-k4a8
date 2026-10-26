@@ -1,5 +1,5 @@
 export const inputClass =
-  "mt-2 w-full border border-line bg-white px-3 py-3 text-base text-ink outline-none";
+  "mt-2 w-full border border-line bg-white px-3 py-3 text-base text-ink outline-none transition-colors focus:border-navy";
 
 export const labelClass = "block text-sm font-semibold text-ink";
 

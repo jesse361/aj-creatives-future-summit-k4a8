@@ -55,7 +55,8 @@ async function EventResults({ searchParams }: { searchParams: Promise<Search> })
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-      <form className="grid gap-3 border border-line bg-white p-4 md:grid-cols-6" action="/events">
+      <p className="mb-4 text-sm text-ink-soft">{result.total} published {result.total === 1 ? "event" : "events"}</p>
+      <form className="grid gap-3 border border-line border-t-2 border-t-gold bg-white p-4 md:grid-cols-6" action="/events">
         <label className="md:col-span-2 text-sm">
           Search
           <input className={inputClass} name="q" defaultValue={filters.q} placeholder="Title or description" />

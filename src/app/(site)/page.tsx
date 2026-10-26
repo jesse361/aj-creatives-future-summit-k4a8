@@ -10,7 +10,8 @@ import { ButtonLink, DemoNote, SectionHeading } from "@/components/ui";
 import { FORMAT_LABELS } from "@/lib/constants";
 import { eventPlace } from "@/lib/format";
 import { benefitItems, getPage, getSettings } from "@/lib/settings";
-import { getApprovedSponsors, getApprovedTestimonials, getFeaturedEvent, getPreviewSessions, getPublishedSpeakers, getUpcomingPublished } from "@/lib/queries";
+import { getApprovedSponsors, getApprovedTestimonials, getEventFacets, getFeaturedEvent, getPreviewSessions, getPublishedSpeakers, getUpcomingPublished } from "@/lib/queries";
+import { inputClass } from "@/lib/styles";
 import { formatDayLabel, formatTimeRange } from "@/lib/time";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -33,7 +34,7 @@ const experienceImages = [
 const icons = [Handshake, Mic2, Sparkles, Compass, Users, Waypoints];
 
 export default async function HomePage() {
-  const [settings, about, benefitsPage, featured, upcoming, speakers, sponsors, testimonials] = await Promise.all([
+  const [settings, about, benefitsPage, featured, upcoming, speakers, sponsors, testimonials, facets] = await Promise.all([
     getSettings(),
     getPage("home-about"),
     getPage("benefits"),
@@ -42,6 +43,7 @@ export default async function HomePage() {
     getPublishedSpeakers(),
     getApprovedSponsors(),
     getApprovedTestimonials(),
+    getEventFacets(),
   ]);
   const benefits = benefitItems(benefitsPage?.body);
   const previewEvent = upcoming[0];
@@ -49,17 +51,17 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="relative min-h-[78vh] overflow-hidden bg-navy text-white">
+      <section className="relative min-h-[88vh] overflow-hidden bg-navy text-white">
         <Image src="/images/hero.jpg" alt="Illustrative photograph of a conference audience. Not a confirmed WHY US event." fill priority className="object-cover" sizes="100vw" />
         <div className="hero-shade absolute inset-0" />
-        <div className="relative mx-auto grid max-w-6xl items-end gap-12 px-4 py-20 sm:px-6 lg:grid-cols-12 lg:px-8 lg:py-28">
+        <div className="relative mx-auto grid min-h-[88vh] max-w-6xl items-end gap-12 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:px-8 lg:py-24">
           <div className="lg:col-span-7">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gold">{settings.legalName}</p>
-            <h1 className="mt-5 font-display text-5xl font-medium leading-[0.95] tracking-tight sm:text-7xl">
+            <h1 className="mt-5 font-display text-5xl font-medium leading-[0.92] tracking-tight sm:text-7xl lg:text-[5.25rem]">
               WHERE IDEAS MEET.
-              <span className="mt-2 block">WHERE CONNECTIONS BEGIN.</span>
+              <span className="mt-3 block text-white/90">WHERE CONNECTIONS BEGIN.</span>
             </h1>
-            <div className="gold-rule mt-6" />
+            <div className="gold-rule mt-7" />
             <p className="mt-6 max-w-xl text-lg leading-8 text-white/85">
               Discover exceptional conferences, connect with inspiring people, and experience events designed to turn ideas into opportunities.
             </p>
@@ -68,7 +70,7 @@ export default async function HomePage() {
               <ButtonLink href="/about" variant="secondary">Discover WHY US</ButtonLink>
             </div>
           </div>
-          <aside className="border border-white/15 bg-navy/70 p-6 backdrop-blur lg:col-span-5">
+          <aside className="border border-white/15 bg-navy/75 p-6 backdrop-blur-md lg:col-span-5">
             {featured ? (
               <>
                 <p className="text-xs uppercase tracking-[0.18em] text-gold">Next event</p>
@@ -103,9 +105,37 @@ export default async function HomePage() {
           <SectionHeading eyebrow="The programme" title="Upcoming events" description="Published events from the WHY US calendar. Demonstration entries are labeled until the owner replaces them." />
           <ButtonLink href="/events" variant="ghost">All events</ButtonLink>
         </div>
+        <form action="/events" className="mt-10 grid gap-3 border border-line bg-white p-4 md:grid-cols-[1.4fr_1fr_1fr_auto]">
+          <label className="text-sm font-semibold">
+            Search
+            <input className={inputClass} name="q" placeholder="Title or description" />
+          </label>
+          <label className="text-sm font-semibold">
+            Category
+            <select className={inputClass} name="category" defaultValue="">
+              <option value="">All categories</option>
+              {facets.categories.map((category) => <option key={category}>{category}</option>)}
+            </select>
+          </label>
+          <label className="text-sm font-semibold">
+            Sort
+            <select className={inputClass} name="sort" defaultValue="soonest">
+              <option value="soonest">Soonest</option>
+              <option value="latest">Latest</option>
+              <option value="title">Title</option>
+            </select>
+          </label>
+          <div className="flex items-end">
+            <button className="min-h-11 w-full bg-navy px-5 text-xs font-semibold uppercase tracking-[0.16em] text-white">Search</button>
+          </div>
+        </form>
         {upcoming.length ? (
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {upcoming.map((event) => <EventCard key={event.id} event={event} />)}
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {upcoming.map((event, index) => (
+              <div key={event.id} className={index === 0 ? "md:col-span-2" : undefined}>
+                <EventCard event={event} featured={index === 0} />
+              </div>
+            ))}
           </div>
         ) : (
           <p className="mt-10 border border-dashed border-line px-6 py-12 text-ink-soft">Published events will appear here. Nothing is confirmed yet.</p>
@@ -151,11 +181,11 @@ export default async function HomePage() {
           {speakers.length ? (
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {speakers.slice(0, 4).map((speaker) => (
-                <Link key={speaker.id} href={`/speakers/${speaker.slug}`} className="group border border-line p-4">
-                  <Portrait name={speaker.name} src={speaker.portrait} className="aspect-square text-4xl text-navy" />
-                  <div className="mt-4 flex flex-wrap gap-2">{speaker.isDemonstration ? <DemoNote /> : null}</div>
-                  <h3 className="mt-3 font-display text-2xl group-hover:text-electric">{speaker.name}</h3>
-                  <p className="text-sm text-ink-soft">{speaker.professionalTitle}</p>
+                <Link key={speaker.id} href={`/speakers/${speaker.slug}`} className="group border border-line bg-paper p-3 transition hover:border-navy">
+                  <Portrait name={speaker.name} src={speaker.portrait} className="aspect-[3/4] bg-navy text-5xl text-gold" />
+                  <div className="px-2 pt-4">{speaker.isDemonstration ? <DemoNote /> : null}</div>
+                  <h3 className="mt-3 px-2 font-display text-2xl text-navy group-hover:text-electric">{speaker.name}</h3>
+                  <p className="px-2 pb-3 text-sm text-ink-soft">{speaker.professionalTitle}</p>
                 </Link>
               ))}
             </div>
@@ -243,7 +273,8 @@ export default async function HomePage() {
 
       <section className="mx-auto max-w-6xl px-4 py-24 text-center sm:px-6 lg:px-8">
         <p className="text-xs uppercase tracking-[0.22em] text-electric">WHY US</p>
-        <h2 className="mx-auto mt-4 max-w-3xl font-display text-5xl text-navy sm:text-6xl">YOUR NEXT GREAT EXPERIENCE STARTS HERE.</h2>
+        <div className="gold-rule mx-auto mt-5" />
+        <h2 className="mx-auto mt-6 max-w-4xl font-display text-5xl leading-[0.95] text-navy sm:text-6xl">YOUR NEXT GREAT EXPERIENCE STARTS HERE.</h2>
         <div className="mt-8">
           <ButtonLink href="/events">Explore upcoming events</ButtonLink>
         </div>

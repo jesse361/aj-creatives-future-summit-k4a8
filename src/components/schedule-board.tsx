@@ -30,23 +30,23 @@ export function ScheduleBoard({
           if (eventSlug) query.set("event", eventSlug);
           query.set("day", key);
           return (
-            <Link key={key} href={`?${query.toString()}`} role="tab" aria-selected={key === selected} className={`border px-4 py-2 text-xs uppercase tracking-[0.14em] ${key === selected ? "border-navy bg-navy text-white" : "border-line bg-white"}`}>
+            <Link key={key} href={`?${query.toString()}`} role="tab" aria-selected={key === selected} className={`shrink-0 border px-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] ${key === selected ? "border-navy bg-navy text-white" : "border-line bg-white text-navy hover:border-navy"}`}>
               {new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone }).format(new Date(`${key}T12:00:00Z`))}
             </Link>
           );
         })}
       </div>
       <p className="mt-4 text-xs uppercase tracking-[0.16em] text-mist">Times shown in {timeZone}</p>
-      <ol className="mt-6 border-l border-gold">
+      <ol className="mt-6 border-l border-gold/80">
         {visible.map((session) => (
-          <li key={session.id} className="relative py-4 pl-6">
-            <span className="absolute top-6 -left-1 h-2 w-2 bg-gold" aria-hidden />
-            <p className="text-xs uppercase tracking-[0.14em] text-electric">
+          <li key={session.id} className="relative py-5 pl-6">
+            <span className="absolute top-7 -left-[5px] h-2.5 w-2.5 bg-gold" aria-hidden />
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-electric">
               {formatTimeRange(session.startAt, session.endAt, timeZone)}
               {session.room ? ` · ${session.room}` : ""}
             </p>
             <h3 className="mt-1 font-display text-2xl text-navy">{session.title}</h3>
-            <p className="text-xs uppercase tracking-[0.14em] text-mist">{session.category}</p>
+            <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-mist">{session.category}</p>
             {session.description ? <p className="mt-2 max-w-2xl text-sm leading-6 text-ink-soft">{session.description}</p> : null}
             {session.speakers.length ? (
               <p className="mt-2 text-sm">

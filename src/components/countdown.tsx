@@ -25,9 +25,9 @@ export function Countdown({ startAt, endAt }: { startAt: string; endAt: string }
     return (
       <div className="grid grid-cols-4 gap-2" aria-live="polite">
         {parts.map(([label, value]) => (
-          <div key={String(label)} className="border border-white/15 px-2 py-3 text-center">
-            <div className="font-display text-2xl">{value}</div>
-            <div className="mt-1 text-[10px] uppercase tracking-[0.14em] text-mist">{label}</div>
+          <div key={String(label)} className="border border-white/15 bg-navy/40 px-2 py-3 text-center">
+            <div className="font-display text-3xl text-gold">{value}</div>
+            <div className="mt-1 text-[10px] uppercase tracking-[0.16em] text-mist">{label}</div>
           </div>
         ))}
       </div>

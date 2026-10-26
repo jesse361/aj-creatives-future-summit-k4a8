@@ -2,8 +2,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Countdown } from "@/components/countdown";
-import { MediaFill } from "@/components/media-image";
+import { EventCard } from "@/components/event-card";
+import { MediaFill, Portrait } from "@/components/media-image";
 import { ScheduleBoard } from "@/components/schedule-board";
+import { TicketCard } from "@/components/ticket-card";
 import { ButtonLink, DemoNote } from "@/components/ui";
 import { FORMAT_LABELS } from "@/lib/constants";
 import { eventPlace } from "@/lib/format";
@@ -117,9 +119,17 @@ export default async function EventPage({ params, searchParams }: { params: Prom
           </section>
           <section>
             <h2 className="font-display text-3xl text-navy">Speakers</h2>
-            <ul className="mt-4 grid gap-3">
+            <ul className="mt-6 grid gap-4 sm:grid-cols-2">
               {speakers.map((speaker) => (
-                <li key={speaker.id}><Link className="underline" href={`/speakers/${speaker.slug}`}>{speaker.name}</Link> <span className="text-ink-soft">· {speaker.professionalTitle}</span></li>
+                <li key={speaker.id}>
+                  <Link href={`/speakers/${speaker.slug}`} className="flex gap-4 border border-line bg-white p-4 transition hover:border-navy">
+                    <Portrait name={speaker.name} src={speaker.portrait} className="h-20 w-20 shrink-0 bg-navy text-2xl text-gold" />
+                    <span>
+                      <span className="block font-display text-2xl text-navy">{speaker.name}</span>
+                      <span className="mt-1 block text-sm text-ink-soft">{speaker.professionalTitle}</span>
+                    </span>
+                  </Link>
+                </li>
               ))}
               {speakers.length === 0 ? <li className="text-ink-soft">Speakers will be published with the programme.</li> : null}
             </ul>
@@ -139,20 +149,21 @@ export default async function EventPage({ params, searchParams }: { params: Prom
           ) : null}
         </div>
         <aside className="grid h-fit gap-6">
-          <section className="border border-line bg-white p-5">
-            <h2 className="font-display text-2xl">Tickets</h2>
-            <ul className="mt-4 grid gap-4">
-              {event.ticketTypes.map((ticket) => (
-                <li key={ticket.id} className="border-t border-line pt-3">
-                  <p className="font-medium">{ticket.name}</p>
-                  <p className="text-sm text-ink-soft">{ticket.description}</p>
-                  <p className="mt-1">{ticket.priceMinor === 0 ? "Free" : formatMoney(ticket.priceMinor, ticket.currency)}</p>
-                  <p className="text-xs uppercase tracking-[0.14em] text-mist">{Math.max(ticket.capacity - ticket.sold - ticket.reserved, 0)} available</p>
-                  {ticket.isDemonstration ? <p className="text-xs text-ink-soft">Demonstration price</p> : null}
-                </li>
-              ))}
-              {event.ticketTypes.length === 0 ? <li className="text-sm text-ink-soft">Tickets have not been published.</li> : null}
-            </ul>
+          <section className="grid gap-4">
+            <h2 className="font-display text-3xl text-navy">Tickets</h2>
+            {event.ticketTypes.map((ticket) => (
+              <TicketCard
+                key={ticket.id}
+                name={ticket.name}
+                description={ticket.description}
+                priceLabel={ticket.priceMinor === 0 ? "Free" : formatMoney(ticket.priceMinor, ticket.currency)}
+                benefits={ticket.benefits}
+                meta={`${Math.max(ticket.capacity - ticket.sold - ticket.reserved, 0)} available`}
+                href={event.registrationOpen && event.status === "PUBLISHED" ? `/register?event=${event.slug}&ticket=${ticket.id}` : undefined}
+                demo={ticket.isDemonstration}
+              />
+            ))}
+            {event.ticketTypes.length === 0 ? <p className="text-sm text-ink-soft">Tickets have not been published.</p> : null}
           </section>
           <section className="border border-line bg-white p-5">
             <h2 className="font-display text-2xl">Venue and access</h2>
@@ -182,11 +193,11 @@ export default async function EventPage({ params, searchParams }: { params: Prom
         </section>
       ) : null}
       {related.length ? (
-        <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-          <h2 className="font-display text-3xl text-navy">Related events</h2>
-          <ul className="mt-4 grid gap-3">
-            {related.map((item) => <li key={item.id}><Link className="underline" href={`/events/${item.slug}`}>{item.title}</Link></li>)}
-          </ul>
+        <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+          <h2 className="font-display text-4xl text-navy">Related events</h2>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {related.map((item) => <EventCard key={item.id} event={item} />)}
+          </div>
         </section>
       ) : null}
     </article>

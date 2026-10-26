@@ -50,6 +50,24 @@ export function toPublicSession(session: {
   };
 }
 
+export async function getEventFacets() {
+  "use cache";
+  cacheTag(TAGS.events);
+  cacheLife({ stale: 60, revalidate: 60, expire: 3600 });
+  try {
+    const categories = await prisma.event.findMany({
+      where: publishedEvent,
+      distinct: ["category"],
+      select: { category: true },
+      orderBy: { category: "asc" },
+    });
+    return { categories: categories.map((item) => item.category) };
+  } catch (error) {
+    console.error("Event categories are unavailable.", error);
+    return { categories: [] as string[] };
+  }
+}
+
 export async function getUpcomingPublished(limit = 6) {
   "use cache";
   cacheTag(TAGS.events);
@@ -274,6 +292,7 @@ export async function relatedEvents(eventId: string, category: string) {
       where: { ...publishedEvent, id: { not: eventId }, category },
       orderBy: { startDate: "asc" },
       take: 3,
+      include: { ticketTypes: { where: { status: "ACTIVE" }, orderBy: { priceMinor: "asc" }, take: 1 } },
     });
   } catch {
     return [];

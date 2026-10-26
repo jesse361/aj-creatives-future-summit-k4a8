@@ -43,19 +43,23 @@ export function SectionHeading({
   return (
     <div className="max-w-2xl">
       <p className={`text-xs font-semibold uppercase tracking-[0.22em] ${light ? "text-gold" : "text-electric"}`}>{eyebrow}</p>
-      <h2 className={`mt-3 font-display text-4xl font-medium tracking-tight sm:text-5xl ${light ? "text-white" : "text-navy"}`}>{title}</h2>
-      {description ? <p className={`mt-4 text-base leading-7 ${light ? "text-mist" : "text-ink-soft"}`}>{description}</p> : null}
+      <div className="gold-rule mt-4" />
+      <h2 className={`mt-5 font-display text-4xl font-medium leading-[0.98] tracking-tight sm:text-5xl ${light ? "text-white" : "text-navy"}`}>{title}</h2>
+      {description ? <p className={`mt-4 text-base leading-7 ${light ? "text-white/75" : "text-ink-soft"}`}>{description}</p> : null}
     </div>
   );
 }
 
 export function PageHero({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
   return (
-    <section className="bg-navy text-white">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold">{eyebrow}</p>
-        <h1 className="mt-4 max-w-4xl font-display text-5xl font-medium tracking-tight sm:text-6xl">{title}</h1>
-        <p className="mt-5 max-w-2xl text-lg leading-8 text-mist">{description}</p>
+    <section className="relative overflow-hidden bg-navy text-white">
+      <div className="absolute inset-y-0 right-0 hidden w-[38%] bg-ink lg:block" aria-hidden />
+      <div className="absolute top-0 right-[38%] hidden h-full w-px bg-gold/40 lg:block" aria-hidden />
+      <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gold">{eyebrow}</p>
+        <div className="gold-rule mt-5" />
+        <h1 className="mt-6 max-w-4xl font-display text-5xl font-medium leading-[0.95] tracking-tight sm:text-7xl">{title}</h1>
+        <p className="mt-6 max-w-2xl text-lg leading-8 text-white/75">{description}</p>
       </div>
     </section>
   );

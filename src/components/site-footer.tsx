@@ -16,6 +16,7 @@ export async function SiteFooter({ settings }: { settings: PublicSettings }) {
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:px-8">
         <div className="lg:col-span-4">
           <p className="font-display text-2xl tracking-[0.18em]">{settings.brandName}</p>
+          <p className="mt-3 text-xs uppercase tracking-[0.18em] text-gold">{settings.tagline}</p>
           <p className="mt-4 max-w-sm text-sm leading-6 text-mist">{settings.footerContent}</p>
         </div>
         <div className="lg:col-span-2">

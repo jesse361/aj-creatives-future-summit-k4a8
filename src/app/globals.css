@@ -74,6 +74,21 @@ h4 {
   background: #d8b46a;
 }
 
+.media-zoom {
+  transform: scale(1);
+  transition: transform 700ms ease;
+}
+
+.group:hover .media-zoom {
+  transform: scale(1.045);
+}
+
+.ticket-rail {
+  background:
+    linear-gradient(#d8b46a, #d8b46a) 0 0 / 3px 100% no-repeat,
+    #ffffff;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
