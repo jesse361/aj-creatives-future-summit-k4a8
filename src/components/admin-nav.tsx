@@ -26,7 +26,7 @@ export function AdminNav({ email, role }: { email: string; role: string }) {
   return (
     <aside className="bg-navy text-white lg:min-h-screen">
       <div className="px-5 py-6">
-        <p className="text-xs tracking-[0.18em] text-gold">WHY US</p>
+        <p className="text-xs tracking-[0.18em] text-gold">Ahene Fia</p>
         <p className="font-display text-xl">Admin</p>
         <p className="mt-2 text-xs text-mist">{email}</p>
         <p className="text-xs uppercase tracking-[0.14em] text-mist">{role}</p>

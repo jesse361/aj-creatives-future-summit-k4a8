@@ -49,7 +49,7 @@ export default async function RegistrationsAdmin({ searchParams }: { searchParam
             {registrations.map((registration) => (
               <tr key={registration.id} className="border-t border-line align-top">
                 <td className="p-2">{registration.reference}</td>
-                <td>{registration.attendeeName}<br />{registration.attendeeEmail}</td>
+                <td>{registration.attendeeName}<br />{registration.attendeeEmail}{registration.dietaryNotes || registration.accessibilityNotes || registration.studentVerification ? <span className="mt-1 block text-xs text-ink-soft">{[registration.studentVerification, registration.dietaryNotes, registration.accessibilityNotes].filter(Boolean).join(" · ")}</span> : null}</td>
                 <td>{registration.event.title}</td>
                 <td>{registration.registrationStatus}</td>
                 <td>{registration.payment?.paymentStatus ?? "—"}</td>

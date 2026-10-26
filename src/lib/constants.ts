@@ -33,12 +33,12 @@ export const SESSION_CATEGORIES = [
 ] as const;
 
 export const INQUIRY_CATEGORIES = [
-  { value: "GENERAL", label: "General inquiry" },
-  { value: "TICKETS", label: "Tickets and registration" },
-  { value: "SPONSORSHIP", label: "Sponsorship" },
-  { value: "SPEAKING", label: "Speaking opportunities" },
-  { value: "PARTNERSHIPS", label: "Partnerships" },
-  { value: "ACCESSIBILITY", label: "Accessibility" },
+  { value: "GENERAL", label: "General enquiries" },
+  { value: "SPONSORSHIP", label: "Sponsorship and partnerships" },
+  { value: "SPEAKING", label: "Speaker applications" },
+  { value: "MEDIA", label: "Media and press" },
+  { value: "GROUP", label: "Group registrations" },
+  { value: "PLANNING", label: "Event planning" },
 ] as const;
 
 export const FORMAT_LABELS: Record<string, string> = {
@@ -51,27 +51,19 @@ export const CURRENCIES = ["GHS", "NGN", "USD", "GBP", "EUR", "ZAR", "KES"] as c
 
 export const BENEFITS = [
   {
-    title: "Meaningful connections",
-    description: "Meet people who are building, leading, and looking for the same kind of serious conversation.",
+    title: "Thought Leadership",
+    description: "Stages for people with something precise to say, and time left for the room to answer back.",
   },
   {
-    title: "Inspiring speakers",
-    description: "Hear from practitioners whose work is worth the room, with time left for real questions.",
+    title: "Meaningful Networking",
+    description: "Introductions with a purpose. The schedule leaves space for conversations that are not rushed between sessions.",
   },
   {
-    title: "Practical knowledge",
-    description: "Leave with ideas you can use, not a folder of slides you will never open again.",
+    title: "Practical Innovation",
+    description: "Workshops and forums aimed at what participants can try next, from product decisions to the shape of a company.",
   },
   {
-    title: "Curated experiences",
-    description: "Programmes shaped around the people in the room, from summits to private gatherings.",
-  },
-  {
-    title: "Professional community",
-    description: "A place for attendees, speakers, sponsors, and partners to keep finding one another.",
-  },
-  {
-    title: "Opportunities for growth",
-    description: "Conferences, workshops, and seminars designed to turn a good idea into the next step.",
+    title: "Extraordinary Experiences",
+    description: "A setting, a pace, and a standard of care that make the gathering feel considered before anyone arrives.",
   },
 ] as const;

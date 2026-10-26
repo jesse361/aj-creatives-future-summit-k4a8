@@ -35,7 +35,7 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
       </label>
       <label className="flex items-start gap-2 text-xs leading-5 text-mist">
         <input type="checkbox" className="mt-1" {...form.register("consent")} />
-        I agree to receive event news from WHY US and I can unsubscribe at any time.
+        I agree to receive event news from Ahene Fia and I can unsubscribe at any time.
       </label>
       {form.formState.errors.email ? <p className="text-sm text-gold">{form.formState.errors.email.message}</p> : null}
       {form.formState.errors.consent ? <p className="text-sm text-gold">{form.formState.errors.consent.message}</p> : null}

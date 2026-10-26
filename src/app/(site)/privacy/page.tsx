@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/ui";
 import { getPage } from "@/lib/settings";
 
-export const metadata: Metadata = { title: "Privacy", description: "How WHY US handles personal information." };
+export const metadata: Metadata = { title: "Privacy", description: "How Ahene Fia handles personal information submitted on this site.", alternates: { canonical: "/privacy" } };
 
 export default async function PrivacyPage() {
   const page = await getPage("privacy");

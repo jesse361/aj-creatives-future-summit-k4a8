@@ -1,8 +1,8 @@
-# WHY US — Events & Conference Hub
+# Ahene Fia — Events & Conference Hub
 
-Multi-event conference platform. Public pages, registration, and a protected admin dashboard read and write PostgreSQL through Prisma. Demonstration events, speakers, and prices are labeled in the database and on the site. They are not confirmed WHY US events.
+Public site for Ahene Fia, a premium events and conference house. The pages, registration flow, and protected admin dashboard read and write PostgreSQL through Prisma. The Leadership & Innovation Summit 2027, its speakers, sponsors, rooms, and Ghanaian cedi prices are labeled demonstration content. They are not a confirmed programme.
 
-Paystack, Resend, and Vercel Blob are implemented. In this repository their credentials are empty, so paid checkout, email delivery, and image uploads are **not configured** and the application says so. A browser return from checkout is never treated as proof of payment.
+Paystack, Resend, and Vercel Blob are implemented. In this repository their credentials are empty, so paid checkout, email delivery, and image uploads are **not configured** and the application says so. A browser return from checkout is never treated as proof of payment. Free registrations are stored in the database. Paid registrations are refused until Paystack is configured.
 
 Attendee accounts are not part of this application. Visitors register for an event without creating a login.
 
@@ -120,7 +120,7 @@ Do not put secrets in `NEXT_PUBLIC_` variables. `NEXT_PUBLIC_SITE_URL` is only t
 
 ## Media
 
-Uploads accept JPEG, PNG, and WebP up to 2 MB after checking file bytes. Files are stored in Vercel Blob under random names. Until `BLOB_READ_WRITE_TOKEN` is set, the admin media screen refuses uploads. Illustrative photographs in `public/images` are local Unsplash files used as design imagery, not photographs of confirmed WHY US events.
+Uploads accept JPEG, PNG, and WebP up to 2 MB after checking file bytes. Files are stored in Vercel Blob under random names. Until `BLOB_READ_WRITE_TOKEN` is set, the admin media screen refuses uploads. Illustrative photographs in `public/images` are local Unsplash files used as design imagery, not photographs of confirmed Ahene Fia events.
 
 ## Email and password recovery
 

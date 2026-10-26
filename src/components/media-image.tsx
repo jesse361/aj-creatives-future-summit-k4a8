@@ -25,12 +25,12 @@ export function MediaFill({
   return <Image src={safe} alt={alt} fill priority={priority} sizes={sizes} className={className} />;
 }
 
-export function Portrait({ name, src, className = "" }: { name: string; src?: string | null; className?: string }) {
+export function Portrait({ name, src, className = "", sizes = "240px" }: { name: string; src?: string | null; className?: string; sizes?: string }) {
   const safe = src && (src.startsWith("/") || src.startsWith("https://")) ? src : "";
   return (
     <div className={`relative overflow-hidden bg-paper ${className}`}>
       {safe ? (
-        <MediaFill src={safe} alt={`Portrait of ${name}`} sizes="240px" />
+        <MediaFill src={safe} alt="" sizes={sizes} className="object-cover" />
       ) : (
         <span className="grid h-full w-full place-items-center font-display">{name.slice(0, 1)}</span>
       )}

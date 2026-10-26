@@ -74,7 +74,7 @@ export default async function EventPage({ params, searchParams }: { params: Prom
     <article>
       {jsonLd ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} /> : null}
       <header className="relative min-h-[28rem] bg-navy text-white">
-        <MediaFill src={event.coverImage} alt={event.coverAlt || "Illustrative event photograph. Not a confirmed WHY US photograph."} priority className="object-cover opacity-50" sizes="100vw" />
+        <MediaFill src={event.coverImage} alt={event.coverAlt || "Illustrative event photograph. Not a confirmed Ahene Fia photograph."} priority className="object-cover opacity-40" sizes="100vw" />
         <div className="hero-shade absolute inset-0" />
         <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="flex flex-wrap gap-2">
@@ -95,7 +95,7 @@ export default async function EventPage({ params, searchParams }: { params: Prom
             </div>
           ) : null}
           {event.registrationOpen && event.status === "PUBLISHED" ? (
-            <div className="mt-8"><ButtonLink href={`/register?event=${event.slug}`}>Register</ButtonLink></div>
+            <div className="mt-8"><ButtonLink href={`/register?event=${event.slug}`} variant="gold">Register</ButtonLink></div>
           ) : (
             <p className="mt-8 text-sm text-mist">Registration is closed for this event.</p>
           )}

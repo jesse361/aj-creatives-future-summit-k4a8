@@ -45,7 +45,7 @@ export async function sendInquiryEmail(input: { name: string; email: string; cat
   if (!to) return "SKIPPED" as const;
   return send({
     to,
-    subject: `WHY US inquiry: ${input.subject}`,
+    subject: `Ahene Fia inquiry: ${input.subject}`,
     text: `${input.name} <${input.email}>\nCategory: ${input.category}\n\n${input.message}\n`,
   });
 }
@@ -53,7 +53,7 @@ export async function sendInquiryEmail(input: { name: string; email: string; cat
 export async function sendPasswordResetEmail(input: { email: string; url: string }) {
   return send({
     to: input.email,
-    subject: "Reset your WHY US admin password",
+    subject: "Reset your Ahene Fia admin password",
     text: `Use this link within one hour to choose a new password:\n\n${input.url}\n\nIf you did not request this, you can ignore the email.\n`,
   });
 }

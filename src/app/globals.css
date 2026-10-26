@@ -1,25 +1,31 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-space), ui-sans-serif, system-ui, sans-serif;
-  --color-navy: #0b1020;
-  --color-ink: #151923;
-  --color-electric: #4169ff;
-  --color-gold: #d8b46a;
-  --color-paper: #f7f7f4;
-  --color-mist: #9299a8;
-  --color-line: #e6e4dc;
-  --color-ink-soft: #3c4456;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cormorant), "Times New Roman", serif;
+  --color-navy: #10151b;
+  --color-midnight: #10151b;
+  --color-forest: #123d32;
+  --color-ink: #252a2d;
+  --color-charcoal: #252a2d;
+  --color-electric: #123d32;
+  --color-gold: #d6ad60;
+  --color-paper: #f7f3ea;
+  --color-ivory: #f7f3ea;
+  --color-mist: #a7a39a;
+  --color-stone: #a7a39a;
+  --color-line: #e4dfd2;
+  --color-ink-soft: #4a463f;
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
-  background: #f7f7f4;
-  color: #151923;
+  background: #f7f3ea;
+  color: #252a2d;
   font-family: var(--font-sans);
 }
 
@@ -31,13 +37,18 @@ h4 {
 }
 
 ::selection {
-  background: #4169ff;
-  color: #ffffff;
+  background: #123d32;
+  color: #f7f3ea;
 }
 
 :focus-visible {
-  outline: 2px solid #4169ff;
+  outline: 2px solid #d6ad60;
   outline-offset: 3px;
+}
+
+a.bg-gold:focus-visible,
+button.bg-gold:focus-visible {
+  outline-color: #10151b;
 }
 
 .skip-link {
@@ -45,8 +56,8 @@ h4 {
   left: 1rem;
   top: -4rem;
   z-index: 80;
-  background: #ffffff;
-  color: #0b1020;
+  background: #f7f3ea;
+  color: #10151b;
   padding: 0.75rem 1rem;
   font-weight: 600;
 }
@@ -55,9 +66,40 @@ h4 {
   top: 1rem;
 }
 
+.shell {
+  width: min(100%, 76rem);
+  max-width: 100%;
+  min-width: 0;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+.shell > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+select,
+input,
+textarea {
+  max-width: 100%;
+}
+
+@media (min-width: 640px) {
+  .shell {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .shell {
+    padding-inline: 2rem;
+  }
+}
+
 .hero-shade {
   background:
-    linear-gradient(90deg, rgb(11 16 32 / 0.92) 0%, rgb(11 16 32 / 0.78) 42%, rgb(11 16 32 / 0.35) 100%);
+    linear-gradient(100deg, rgb(16 21 27 / 0.94) 0%, rgb(16 21 27 / 0.78) 42%, rgb(18 61 50 / 0.45) 100%);
 }
 
 .hp-field {
@@ -71,7 +113,24 @@ h4 {
 .gold-rule {
   height: 1px;
   width: 4.5rem;
-  background: #d8b46a;
+  background: #d6ad60;
+}
+
+.motif {
+  background-image:
+    linear-gradient(90deg, rgb(214 173 96 / 0.16) 1px, transparent 1px),
+    linear-gradient(rgb(214 173 96 / 0.16) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.motif-diagonal {
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent,
+    transparent 12px,
+    rgb(214 173 96 / 0.18) 12px,
+    rgb(214 173 96 / 0.18) 13px
+  );
 }
 
 .media-zoom {
@@ -85,13 +144,36 @@ h4 {
 
 .ticket-rail {
   background:
-    linear-gradient(#d8b46a, #d8b46a) 0 0 / 3px 100% no-repeat,
+    linear-gradient(#d6ad60, #d6ad60) 0 0 / 3px 100% no-repeat,
     #ffffff;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.8s ease both;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .rise {
+    animation: none;
   }
 
   *,

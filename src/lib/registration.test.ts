@@ -64,7 +64,12 @@ function input(eventId: string, ticketTypeId: string, overrides: Record<string, 
     email: "ada@example.com",
     phone: "",
     organization: "",
+    dietaryNotes: "",
+    accessibilityNotes: "",
+    studentVerification: "",
     termsAccepted: true,
+    privacyAccepted: true,
+    marketingConsent: false,
     idempotencyKey: randomUUID(),
     ...overrides,
   };
@@ -151,6 +156,16 @@ describe("registration", () => {
     expect(paid.ok).toBe(false);
   });
 
+  it("requires a student identifier for a student ticket and stores the note", async () => {
+    const event = await createEvent();
+    const ticket = event.ticketTypes[0];
+    await prisma.ticketType.update({ where: { id: ticket.id }, data: { name: "Student Pass" } });
+    await expect(registerAttendee(input(event.id, ticket.id, { email: "student@example.com" }))).rejects.toMatchObject({ code: "VALIDATION" });
+    const saved = await registerAttendee(input(event.id, ticket.id, { email: "student@example.com", studentVerification: "University of Ghana, 2027" }));
+    expect(saved.registration.studentVerification).toContain("Ghana");
+    expect(saved.registration.privacyAccepted).toBe(true);
+  });
+
   it("confirms a verified payment once", async () => {
     const event = await createEvent({ priceMinor: 5000 });
     const ticket = event.ticketTypes[0];
@@ -178,7 +193,7 @@ describe("payments and audience", () => {
   });
 
   it("stores an inquiry and does not duplicate a newsletter subscription", async () => {
-    const inquiry = await createInquiry({ name: "Ada Lovelace", email: "ada@example.com", category: "GENERAL", subject: "Hello there", message: "This is a long enough message." });
+    const inquiry = await createInquiry({ name: "Ada Lovelace", email: "ada@example.com", category: "GENERAL", subject: "Hello there", message: "This is a long enough message.", privacyAccepted: true });
     expect(inquiry.id).toBeTruthy();
     const first = await subscribeNewsletter("ada@example.com");
     const second = await subscribeNewsletter("ada@example.com");

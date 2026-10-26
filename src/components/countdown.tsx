@@ -3,7 +3,25 @@
 import { useEffect, useState } from "react";
 import { getCountdownState } from "@/lib/countdown";
 
-export function Countdown({ startAt, endAt }: { startAt: string; endAt: string }) {
+const units = ["Days", "Hours", "Minutes", "Seconds"] as const;
+
+function Frame({ values, summary }: { values: string[]; summary: string }) {
+  return (
+    <div>
+      <p className="sr-only">{summary}</p>
+      <div className="grid grid-cols-4 gap-2 sm:gap-3" aria-hidden="true">
+        {units.map((label, index) => (
+          <div key={label} className="min-h-[5.25rem] border border-white/15 bg-midnight/50 px-1 py-3 text-center sm:min-h-[6rem]">
+            <div className="tabular font-display text-3xl leading-none text-gold sm:text-4xl">{values[index]}</div>
+            <div className="mt-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ivory/70">{label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function Countdown({ startAt, endAt, timeZone }: { startAt: string; endAt: string; timeZone?: string }) {
   const [now, setNow] = useState<number | null>(null);
   useEffect(() => {
     const kick = window.setTimeout(() => setNow(Date.now()), 0);
@@ -13,27 +31,18 @@ export function Countdown({ startAt, endAt }: { startAt: string; endAt: string }
       window.clearInterval(timer);
     };
   }, []);
-  if (now == null) return <p className="text-sm text-mist">Loading the countdown.</p>;
+
+  const zone = timeZone ? ` Times use ${timeZone}.` : "";
+  if (now == null) {
+    return <Frame values={["—", "—", "—", "—"]} summary={`Countdown loading.${zone}`} />;
+  }
   const state = getCountdownState(now, startAt, endAt);
   if (state.phase === "upcoming") {
-    const parts = [
-      ["Days", state.days],
-      ["Hours", state.hours],
-      ["Minutes", state.minutes],
-      ["Seconds", state.seconds],
-    ];
-    return (
-      <div className="grid grid-cols-4 gap-2" aria-live="polite">
-        {parts.map(([label, value]) => (
-          <div key={String(label)} className="border border-white/15 bg-navy/40 px-2 py-3 text-center">
-            <div className="font-display text-3xl text-gold">{value}</div>
-            <div className="mt-1 text-[10px] uppercase tracking-[0.16em] text-mist">{label}</div>
-          </div>
-        ))}
-      </div>
-    );
+    const values = [state.days, state.hours, state.minutes, state.seconds].map((value) => String(Math.max(0, value)).padStart(2, "0"));
+    return <Frame values={values} summary={`The event starts in ${state.days} days, ${state.hours} hours, and ${state.minutes} minutes.${zone}`} />;
   }
-  if (state.phase === "live") return <p className="text-gold">This event is in progress.</p>;
-  if (state.phase === "ended") return <p className="text-mist">This event has ended.</p>;
-  return null;
+  if (state.phase === "live") return <p className="text-lg text-gold">The gathering has begun.</p>;
+  if (state.phase === "ended") return <p className="text-ivory/80">This gathering has ended.</p>;
+  if (state.phase === "invalid") return <p className="text-ivory/80">The event date could not be read.</p>;
+  return <p className="text-ivory/80">The event date will appear when it is published.</p>;
 }

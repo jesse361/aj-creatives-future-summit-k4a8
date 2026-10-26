@@ -24,18 +24,24 @@ export const registrationSchema = z.object({
   email: z.string().trim().email().max(200),
   phone: z.string().trim().max(30).default(""),
   organization: optionalText(160),
+  dietaryNotes: optionalText(500),
+  accessibilityNotes: optionalText(500),
+  studentVerification: optionalText(160),
   termsAccepted: z.boolean(),
+  privacyAccepted: z.boolean(),
+  marketingConsent: z.boolean().default(false),
   idempotencyKey: z.string().trim().min(8).max(80),
 });
 
 export type RegistrationInput = z.infer<typeof registrationSchema>;
 
 export const contactSchema = z.object({
-  name: trimmed(2, 120),
-  email: z.string().trim().email().max(200),
-  category: z.enum(["GENERAL", "TICKETS", "SPONSORSHIP", "SPEAKING", "PARTNERSHIPS", "ACCESSIBILITY"]),
-  subject: trimmed(3, 160),
-  message: trimmed(10, 4000),
+  name: z.string().trim().min(2, "Enter your full name.").max(120),
+  email: z.string().trim().email("Enter a valid email address.").max(200),
+  category: z.enum(["GENERAL", "TICKETS", "SPONSORSHIP", "SPEAKING", "PARTNERSHIPS", "ACCESSIBILITY", "MEDIA", "GROUP", "PLANNING"]),
+  subject: z.string().trim().min(3, "Enter a subject.").max(160),
+  message: z.string().trim().min(10, "Enter a message of at least 10 characters.").max(4000),
+  privacyAccepted: z.boolean().refine((value) => value, { message: "Acknowledge the privacy notice." }),
 });
 
 export const newsletterSchema = z.object({

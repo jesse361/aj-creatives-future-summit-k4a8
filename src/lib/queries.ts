@@ -1,4 +1,5 @@
 import { cacheLife, cacheTag } from "next/cache";
+import { connection } from "next/server";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { TAGS } from "@/lib/constants";
@@ -85,6 +86,43 @@ export async function getUpcomingPublished(limit = 6) {
   }
 }
 
+const spotlightInclude = {
+  ticketTypes: { where: { status: "ACTIVE" as const }, orderBy: { priceMinor: "asc" as const } },
+  sessions: {
+    where: { status: "PUBLISHED" as const },
+    orderBy: { startTime: "asc" as const },
+    take: 4,
+    include: { speakers: { include: { speaker: true } } },
+  },
+} satisfies Prisma.EventInclude;
+
+export async function getSpotlightEvent() {
+  "use cache";
+  cacheTag(TAGS.events);
+  cacheLife({ stale: 30, revalidate: 60, expire: 3600 });
+  try {
+    const confirmed = await prisma.event.findFirst({
+      where: { ...publishedEvent, isDemonstration: false, endDate: { gte: new Date() } },
+      orderBy: { startDate: "asc" },
+      include: spotlightInclude,
+    });
+    if (confirmed) return confirmed;
+    const summit = await prisma.event.findFirst({
+      where: { ...publishedEvent, slug: "ahene-fia-leadership-innovation-summit-2027", endDate: { gte: new Date() } },
+      include: spotlightInclude,
+    });
+    if (summit) return summit;
+    return await prisma.event.findFirst({
+      where: { ...publishedEvent, endDate: { gte: new Date() } },
+      orderBy: { startDate: "asc" },
+      include: spotlightInclude,
+    });
+  } catch (error) {
+    console.error("Spotlight event is unavailable.", error);
+    return null;
+  }
+}
+
 export async function getFeaturedEvent() {
   "use cache";
   cacheTag(TAGS.events);
@@ -127,6 +165,7 @@ export async function getEventBySlug(slug: string) {
 }
 
 export async function listEvents(filters: EventFilters) {
+  await connection();
   const page = Math.max(1, filters.page ?? 1);
   const take = 9;
   const now = new Date();

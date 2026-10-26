@@ -53,7 +53,9 @@ async function allocate(tx: Prisma.TransactionClient, ticketId: string, quantity
 
 export async function registerAttendee(input: RegistrationInput, options?: { paymentConfigured?: boolean }) {
   const email = input.email.toLowerCase();
-  if (!input.termsAccepted) throw new RegistrationError("TERMS", "Agree to the terms to continue.");
+  if (!input.termsAccepted || !input.privacyAccepted) {
+    throw new RegistrationError("TERMS", "Acknowledge the terms and the privacy notice to continue.");
+  }
   if (input.phone && !PHONE_PATTERN.test(input.phone)) {
     throw new RegistrationError("PHONE", "Enter a phone number using digits and standard symbols.");
   }
@@ -94,6 +96,11 @@ export async function registerAttendee(input: RegistrationInput, options?: { pay
     if (ticket.priceMinor < 0 || ticket.priceMinor * input.quantity > 100_000_000) {
       throw new RegistrationError("VALIDATION", "That ticket cannot be reserved.");
     }
+    const studentTicket = /student/i.test(ticket.name);
+    const studentVerification = studentTicket ? input.studentVerification.trim() : "";
+    if (studentTicket && studentVerification.length < 3) {
+      throw new RegistrationError("VALIDATION", "Student tickets require a school or student identifier.");
+    }
 
     const duplicate = await tx.registration.findFirst({
       where: { eventId: event.id, attendeeEmail: email, registrationStatus: { in: [...ACTIVE_STATUSES] } },
@@ -128,6 +135,11 @@ export async function registerAttendee(input: RegistrationInput, options?: { pay
           totalAmount: subtotal,
           currency: ticket.currency.toUpperCase(),
           termsAccepted: true,
+          privacyAccepted: true,
+          marketingConsent: input.marketingConsent,
+          dietaryNotes: input.dietaryNotes.trim(),
+          accessibilityNotes: input.accessibilityNotes.trim(),
+          studentVerification,
           holdExpiresAt: paymentRequired ? new Date(now.getTime() + holdMinutes * 60 * 1000) : null,
           items: {
             create: {

@@ -21,7 +21,7 @@ export default async function SettingsAdmin() {
         <li>Newsletter sync: {process.env.RESEND_AUDIENCE_ID ? "audience id present" : "stored locally only"}</li>
       </ul>
       <AdminForm action={saveSettings}>
-        <label className={labelClass}>Brand name<input className={inputClass} name="brandName" defaultValue={settings?.brandName ?? "WHY US"} required /></label>
+        <label className={labelClass}>Brand name<input className={inputClass} name="brandName" defaultValue={settings?.brandName ?? "Ahene Fia"} required /></label>
         <label className={labelClass}>Legal name<input className={inputClass} name="legalName" defaultValue={settings?.legalName ?? ""} required /></label>
         <label className={labelClass}>Tagline<input className={inputClass} name="tagline" defaultValue={settings?.tagline ?? ""} required /></label>
         <label className={labelClass}>Secondary tagline<input className={inputClass} name="secondaryTagline" defaultValue={settings?.secondaryTagline ?? ""} required /></label>

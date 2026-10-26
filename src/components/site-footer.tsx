@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cacheLife } from "next/cache";
+import { Emblem } from "@/components/brand-logo";
 import type { PublicSettings } from "@/lib/settings";
-import { NewsletterForm } from "@/components/newsletter-form";
 
 async function copyrightYear() {
   "use cache";
@@ -12,44 +12,51 @@ async function copyrightYear() {
 export async function SiteFooter({ settings }: { settings: PublicSettings }) {
   const year = await copyrightYear();
   return (
-    <footer className="bg-navy text-white">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:px-8">
+    <footer className="relative bg-midnight text-ivory">
+      <div className="motif pointer-events-none absolute inset-0 opacity-40" aria-hidden />
+      <div className="shell relative grid gap-12 py-16 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <p className="font-display text-2xl tracking-[0.18em]">{settings.brandName}</p>
-          <p className="mt-3 text-xs uppercase tracking-[0.18em] text-gold">{settings.tagline}</p>
-          <p className="mt-4 max-w-sm text-sm leading-6 text-mist">{settings.footerContent}</p>
+          <div className="flex items-center gap-3">
+            <Emblem className="h-10 w-10" />
+            <p className="font-display text-3xl">{settings.brandName}</p>
+          </div>
+          <p className="mt-4 max-w-sm text-sm leading-6 text-ivory/75">{settings.footerContent}</p>
         </div>
         <div className="lg:col-span-2">
-          <p className="text-xs uppercase tracking-[0.18em] text-gold">Explore</p>
-          <ul className="mt-4 grid gap-2 text-sm text-white/85">
-            <li><Link href="/events">Events</Link></li>
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-gold">Explore</p>
+          <ul className="mt-4 grid gap-2 text-sm text-ivory/85">
+            <li><Link href="/">Home</Link></li>
             <li><Link href="/speakers">Speakers</Link></li>
             <li><Link href="/schedule">Schedule</Link></li>
             <li><Link href="/tickets">Tickets</Link></li>
+            <li><Link href="/events">All events</Link></li>
             <li><Link href="/about">About</Link></li>
-            <li><Link href="/faq">FAQ</Link></li>
           </ul>
         </div>
         <div className="lg:col-span-3">
-          <p className="text-xs uppercase tracking-[0.18em] text-gold">Contact</p>
-          <ul className="mt-4 grid gap-2 text-sm text-white/85">
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-gold">The gathering</p>
+          <ul className="mt-4 grid gap-2 text-sm text-ivory/85">
+            <li><Link href="/register">Register</Link></li>
+            <li><Link href="/faq">Questions</Link></li>
+            <li><Link href="/contact?category=SPONSORSHIP">Sponsorship enquiry</Link></li>
+            <li><Link href="/contact?category=SPEAKING">Speaker applications</Link></li>
+            <li><Link href="/contact">Contact</Link></li>
+          </ul>
+        </div>
+        <div className="lg:col-span-3">
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-gold">Contact</p>
+          <ul className="mt-4 grid gap-2 text-sm leading-6 text-ivory/85">
             {settings.contactEmail ? <li><a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a></li> : <li>Email not published yet</li>}
-            {settings.contactPhone ? <li>{settings.contactPhone}</li> : null}
+            {settings.contactPhone ? <li>{settings.contactPhone}</li> : <li>Phone not published yet</li>}
             {settings.address ? <li className="whitespace-pre-line">{settings.address}</li> : <li>Address not published yet</li>}
-            {settings.socialLinks.map((link) => (
+            {settings.socialLinks.length ? settings.socialLinks.map((link) => (
               <li key={link.url}><a href={link.url}>{link.label}</a></li>
-            ))}
+            )) : <li>Social profiles will appear when they are published.</li>}
           </ul>
-        </div>
-        <div className="lg:col-span-3">
-          <p className="text-xs uppercase tracking-[0.18em] text-gold">Newsletter</p>
-          <div className="mt-4">
-            <NewsletterForm compact />
-          </div>
         </div>
       </div>
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-5 text-xs uppercase tracking-[0.14em] text-mist sm:px-6 lg:px-8">
+      <div className="relative border-t border-white/10">
+        <div className="shell flex flex-wrap items-center justify-between gap-3 py-5 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-stone">
           <p>© {year} {settings.legalName}</p>
           <div className="flex gap-4">
             <Link href="/privacy">Privacy</Link>

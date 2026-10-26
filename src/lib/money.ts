@@ -12,6 +12,14 @@ export function formatMoney(cents: number, currency: string) {
   }
 }
 
+export function formatMajor(cents: number, currency: string) {
+  if (!Number.isInteger(cents)) return "";
+  if (cents === 0) return "Free";
+  const major = cents / 100;
+  const amount = Number.isInteger(major) ? String(major) : major.toFixed(2);
+  return `${currency.toUpperCase()} ${amount}`;
+}
+
 export function parsePriceToCents(value: string) {
   const normalized = value.trim().replace(/,/g, "");
   if (!/^\d+(\.\d{1,2})?$/.test(normalized)) return null;

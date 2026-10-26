@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     take: 5000,
   });
   const csv = toCsv(
-    ["reference", "event", "name", "email", "phone", "organization", "status", "total", "currency", "payment", "created"],
+    ["reference", "event", "name", "email", "phone", "organization", "dietary", "accessibility", "studentVerification", "marketingConsent", "status", "total", "currency", "payment", "created"],
     registrations.map((registration) => [
       registration.reference,
       registration.event.title,
@@ -27,6 +27,10 @@ export async function GET(request: Request) {
       registration.attendeeEmail,
       registration.attendeePhone,
       registration.organization,
+      registration.dietaryNotes,
+      registration.accessibilityNotes,
+      registration.studentVerification,
+      registration.marketingConsent ? "yes" : "no",
       registration.registrationStatus,
       (registration.totalAmount / 100).toFixed(2),
       registration.currency,

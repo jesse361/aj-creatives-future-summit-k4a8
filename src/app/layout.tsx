@@ -1,30 +1,31 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { brand } from "@/config/brand";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space", display: "swap" });
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });
+const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-cormorant", display: "swap" });
 const siteUrl = process.env.APP_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: "WHY US — Events & Conference Hub", template: "%s · WHY US" },
-  description: "Discover exceptional conferences, connect with inspiring people, and experience events designed to turn ideas into opportunities.",
-  applicationName: "WHY US",
+  title: { default: brand.seoTitle, template: "%s · Ahene Fia" },
+  description: brand.seoDescription,
+  applicationName: brand.name,
   openGraph: {
-    title: "WHY US — Events & Conference Hub",
-    description: "Where Ideas Meet. Where Connections Begin.",
-    siteName: "WHY US",
+    title: brand.seoTitle,
+    description: brand.seoDescription,
+    siteName: brand.name,
     type: "website",
-    images: [{ url: "/images/hero.jpg", width: 1800, height: 1200, alt: "Illustrative photograph of a conference audience. Not a confirmed WHY US event." }],
+    images: [{ url: "/images/hero.jpg", width: 1800, height: 1200, alt: "Illustrative photograph of a conference audience. Not a confirmed Ahene Fia event." }],
   },
-  twitter: { card: "summary_large_image", title: "WHY US", description: "Where Ideas Meet. Where Connections Begin.", images: ["/images/hero.jpg"] },
+  twitter: { card: "summary_large_image", title: brand.name, description: brand.tagline, images: ["/images/hero.jpg"] },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col font-sans">{children}</body>
+    <html lang="en" className={`${manrope.variable} ${cormorant.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col bg-ivory font-sans text-ink">{children}</body>
     </html>
   );
 }

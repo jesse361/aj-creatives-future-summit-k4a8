@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 120" role="img">
+  <rect width="360" height="120" fill="#F7F3EA"/>
+  <rect x="8" y="8" width="344" height="104" fill="none" stroke="#123D32" stroke-width="2"/>
+  <text x="180" y="68" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#10151B">DEMO PARTNER</text>
+</svg>

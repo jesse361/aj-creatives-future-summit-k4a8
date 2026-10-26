@@ -120,10 +120,10 @@ model AdminSession {
 
 model SiteSettings {
   id                      String   @id @default("site")
-  brandName               String   @default("WHY US")
-  legalName               String   @default("WHY US — Events & Conference Hub")
-  tagline                 String   @default("Where Ideas Meet. Where Connections Begin.")
-  secondaryTagline        String   @default("Bringing People, Ideas, and Opportunities Together.")
+  brandName               String   @default("Ahene Fia")
+  legalName               String   @default("Ahene Fia — Events & Conference Hub")
+  tagline                 String   @default("Where Vision Meets Experience.")
+  secondaryTagline        String   @default("Bringing ambitious minds together through extraordinary conferences, meaningful connections, and experiences that move ideas forward.")
   logoUrl                 String   @default("")
   faviconUrl              String   @default("")
   contactEmail            String   @default("")
@@ -334,6 +334,11 @@ model Registration {
   totalAmount        Int
   currency           String
   termsAccepted      Boolean            @default(false)
+  privacyAccepted    Boolean            @default(false)
+  marketingConsent   Boolean            @default(false)
+  dietaryNotes       String             @default("")
+  accessibilityNotes String             @default("")
+  studentVerification String            @default("")
   emailStatus        String             @default("SKIPPED")
   holdExpiresAt      DateTime?
   createdAt          DateTime           @default(now())

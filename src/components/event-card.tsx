@@ -34,7 +34,7 @@ export function EventCard({ event, featured = false }: { event: CardEvent; featu
       <div className={`relative overflow-hidden bg-navy ${featured ? "min-h-64 lg:w-[46%]" : "aspect-[16/10]"}`}>
         <MediaFill
           src={event.coverImage}
-          alt={event.coverAlt || "Illustrative event photograph. Not a confirmed WHY US photograph."}
+          alt={event.coverAlt || "Illustrative event photograph. Not a confirmed Ahene Fia photograph."}
           sizes={featured ? "(min-width: 1024px) 40vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
           className="media-zoom object-cover"
         />

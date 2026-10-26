@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/ui";
 import { getPublishedFaqs } from "@/lib/queries";
 
-export const metadata: Metadata = { title: "FAQ", description: "Questions about WHY US events, tickets, and attendance." };
+export const metadata: Metadata = { title: "Questions", description: "Questions about Ahene Fia events, tickets, and attendance.", alternates: { canonical: "/faq" } };
 
 export default async function FaqPage() {
   const faqs = await getPublishedFaqs();
   const groups = [...new Set(faqs.map((faq) => faq.category))];
   return (
     <>
-      <PageHero eyebrow="Help" title="Questions" description="Answers published by the organizer." />
+      <PageHero eyebrow="Help" title="Questions" description="Answers published by the organizer." crumbs={[{ name: "Home", path: "/" }, { name: "Questions", path: "/faq" }]} />
       <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6">
         {groups.map((group) => (
           <section key={group} className="mb-10">

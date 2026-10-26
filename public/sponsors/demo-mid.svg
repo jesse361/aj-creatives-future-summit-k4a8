@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 100" role="img">
+  <rect width="280" height="100" fill="#FFFFFF"/>
+  <rect x="10" y="10" width="260" height="80" fill="none" stroke="#10151B" stroke-width="2"/>
+  <text x="140" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#123D32">DEMO ALLY</text>
+</svg>

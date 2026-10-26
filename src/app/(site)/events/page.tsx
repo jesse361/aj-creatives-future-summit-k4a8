@@ -8,7 +8,7 @@ import { inputClass } from "@/lib/styles";
 
 export const metadata: Metadata = {
   title: "Events",
-  description: "Search published WHY US conferences, summits, workshops, and gatherings.",
+  description: "Search published Ahene Fia conferences, summits, workshops, and gatherings.",
 };
 
 type Search = Record<string, string | string[] | undefined>;

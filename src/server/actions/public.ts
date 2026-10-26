@@ -30,7 +30,12 @@ export async function registerAction(_previous: FormState, formData: FormData): 
       email: formData.get("email"),
       phone: formData.get("phone") ?? "",
       organization: formData.get("organization") ?? "",
+      dietaryNotes: formData.get("dietaryNotes") ?? "",
+      accessibilityNotes: formData.get("accessibilityNotes") ?? "",
+      studentVerification: formData.get("studentVerification") ?? "",
       termsAccepted: formData.get("termsAccepted") === "on" || formData.get("termsAccepted") === "true",
+      privacyAccepted: formData.get("privacyAccepted") === "on" || formData.get("privacyAccepted") === "true",
+      marketingConsent: formData.get("marketingConsent") === "on" || formData.get("marketingConsent") === "true",
       idempotencyKey: String(formData.get("idempotencyKey") ?? "") || randomUUID(),
     });
     if (!parsed.success) return { ok: false, message: "Please correct the highlighted fields.", fieldErrors: fieldErrors(parsed.error) };
@@ -77,11 +82,14 @@ export async function contactAction(_previous: FormState, formData: FormData): P
       category: formData.get("category"),
       subject: formData.get("subject"),
       message: formData.get("message"),
+      privacyAccepted: formData.get("privacyAccepted") === "on" || formData.get("privacyAccepted") === "true",
     });
-    if (!parsed.success) return { ok: false, message: "Please correct the highlighted fields.", fieldErrors: fieldErrors(parsed.error) };
+    if (!parsed.success) return { ok: false, message: "Please correct the highlighted fields. Your message was not saved.", fieldErrors: fieldErrors(parsed.error) };
     await createInquiry(parsed.data);
-    await sendInquiryEmail(parsed.data);
-    return { ok: true, message: "Your message has been received. We will reply using the email you provided." };
+    const emailStatus = await sendInquiryEmail(parsed.data);
+    if (emailStatus === "SENT") return { ok: true, message: "Your message was saved, and the email service accepted it for delivery." };
+    if (emailStatus === "FAILED") return { ok: true, message: "Your message was saved, but the email service did not confirm delivery. You can write again if you do not hear back." };
+    return { ok: true, message: "Your message was saved for the organizer. Email delivery is not configured, so no email was sent." };
   } catch (error) {
     if (error instanceof RateLimitError) return { ok: false, message: "Too many messages. Please wait and try again." };
     if (unavailable(error)) return { ok: false, message: "The database is unavailable. Your message was not saved." };
@@ -97,7 +105,7 @@ export async function newsletterAction(_previous: FormState, formData: FormData)
       email: formData.get("email"),
       consent: formData.get("consent") === "on" || formData.get("consent") === "true",
     });
-    if (!parsed.success) return { ok: false, message: "Enter your email and confirm you want to hear from WHY US.", fieldErrors: fieldErrors(parsed.error) };
+    if (!parsed.success) return { ok: false, message: "Enter your email and confirm you want to hear from Ahene Fia.", fieldErrors: fieldErrors(parsed.error) };
     const result = await subscribeNewsletter(parsed.data.email);
     await syncNewsletterContact(result.subscriber.email, false);
     if (result.status === "exists") return { ok: true, message: "This email is already subscribed." };

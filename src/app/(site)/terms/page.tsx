@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/ui";
 import { getPage } from "@/lib/settings";
 
-export const metadata: Metadata = { title: "Terms", description: "Terms for using WHY US and attending its events." };
+export const metadata: Metadata = { title: "Terms", description: "Terms for using the Ahene Fia site and attending its events.", alternates: { canonical: "/terms" } };
 
 export default async function TermsPage() {
   const page = await getPage("terms");

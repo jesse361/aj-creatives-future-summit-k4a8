@@ -1,40 +1,68 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Search, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { BrandLogo } from "@/components/brand-logo";
 import { buttonClass } from "@/lib/styles";
 
 const links = [
   { href: "/", label: "Home" },
-  { href: "/events", label: "Events" },
   { href: "/speakers", label: "Speakers" },
   { href: "/schedule", label: "Schedule" },
-  { href: "/about", label: "About" },
+  { href: "/tickets", label: "Tickets" },
   { href: "/contact", label: "Contact" },
 ];
 
-export function SiteHeader({ brand, logoUrl }: { brand: string; logoUrl: string }) {
+export function SiteHeader({ brand }: { brand: string }) {
   const pathname = usePathname();
   const [menuPath, setMenuPath] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
   const open = menuPath === pathname;
-  const [searchOpen, setSearchOpen] = useState(false);
+  const home = pathname === "/";
+  const solid = !home || scrolled || open;
   const menuId = useId();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const returnFocus = useRef(false);
+  const close = useCallback(() => {
+    returnFocus.current = true;
+    setMenuPath(null);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => {
+      if (media.matches) setMenuPath(null);
+    };
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
-    const previous = document.body.style.overflow;
+    const menuButton = buttonRef.current;
+    const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const inerted = [...document.body.children].filter((node): node is HTMLElement => node instanceof HTMLElement && node !== panelRef.current);
+    for (const node of inerted) node.inert = true;
     const panel = panelRef.current;
-    const items = panel ? [...panel.querySelectorAll<HTMLElement>("a, button, input")] : [];
-    items[0]?.focus();
+    const closeButton = panel?.querySelector<HTMLElement>("[data-menu-close]");
+    closeButton?.focus();
+    const items = panel ? [...panel.querySelectorAll<HTMLElement>("a, button")] : [];
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setMenuPath(null);
-        buttonRef.current?.focus();
+        event.preventDefault();
+        close();
       }
       if (event.key !== "Tab" || items.length === 0) return;
       const first = items[0];
@@ -49,83 +77,95 @@ export function SiteHeader({ brand, logoUrl }: { brand: string; logoUrl: string 
     };
     document.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = previous;
+      document.body.style.overflow = previousOverflow;
+      for (const node of inerted) node.inert = false;
       document.removeEventListener("keydown", onKey);
+      if (returnFocus.current) {
+        returnFocus.current = false;
+        menuButton?.focus();
+      }
     };
-  }, [open]);
+  }, [open, close]);
 
   const current = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
-  return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-navy/95 text-white backdrop-blur">
-      <div className="mx-auto flex h-[4.5rem] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-3">
-          {logoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={logoUrl} alt="" className="h-9 w-9 object-contain" />
-          ) : (
-            <span className="grid h-10 w-10 place-items-center border border-gold text-[10px] font-semibold tracking-[0.14em] text-gold">WU</span>
-          )}
-          <span className="flex flex-col leading-none">
-            <span className="font-display text-lg tracking-[0.22em]">{brand}</span>
-            <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-gold">Events & Conference Hub</span>
-          </span>
+  const menu = open ? (
+    <div
+      ref={panelRef}
+      id={menuId}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Site menu"
+      className="fixed inset-0 z-50 flex flex-col overflow-y-auto overscroll-contain bg-midnight text-ivory lg:hidden"
+    >
+      <div className="shell flex min-h-[4.75rem] shrink-0 items-center justify-between gap-3 pt-[env(safe-area-inset-top)]">
+        <BrandLogo name={brand} compact onNavigate={close} />
+        <button
+          type="button"
+          data-menu-close
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/20"
+          onClick={close}
+        >
+          <span className="sr-only">Close menu</span>
+          <X size={20} aria-hidden />
+        </button>
+      </div>
+      <nav className="shell flex flex-1 flex-col py-4" aria-label="Mobile">
+        {links.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            onClick={close}
+            aria-current={current(link.href) ? "page" : undefined}
+            className={`flex min-h-14 items-center border-b border-white/10 text-[0.95rem] font-semibold uppercase tracking-[0.16em] ${current(link.href) ? "text-gold" : "text-ivory"}`}
+          >
+            {link.label}
+          </Link>
+        ))}
+      </nav>
+      <div className="shell pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+        <Link href="/tickets" onClick={close} className={`${buttonClass("gold")} w-full`}>
+          Get Tickets
         </Link>
-        <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
+      </div>
+    </div>
+  ) : null;
+
+  return (
+    <header className={`sticky top-0 z-40 text-ivory transition-colors ${solid ? "border-b border-white/10 bg-midnight/95 backdrop-blur" : "bg-transparent"}`}>
+      <div className="shell flex h-[4.75rem] items-center justify-between gap-3">
+        <BrandLogo name={brand} compact />
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
           {links.map((link) => (
-            <Link key={link.href} href={link.href} aria-current={current(link.href) ? "page" : undefined} className={`text-xs uppercase tracking-[0.16em] ${current(link.href) ? "text-gold" : "text-white/80 hover:text-white"}`}>
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={current(link.href) ? "page" : undefined}
+              className={`text-[0.72rem] font-semibold uppercase tracking-[0.16em] underline-offset-8 ${current(link.href) ? "text-gold underline" : "text-ivory/80 hover:text-ivory"}`}
+            >
               {link.label}
             </Link>
           ))}
         </nav>
-        <div className="hidden items-center gap-3 lg:flex">
-          {searchOpen ? (
-            <form action="/events" className="flex items-center border border-white/20">
-              <label className="sr-only" htmlFor="site-search">
-                Search events
-              </label>
-              <input id="site-search" name="q" placeholder="Search events" className="w-40 bg-transparent px-3 py-2 text-sm outline-none" />
-              <button className="px-3 text-gold" type="submit">
-                Go
-              </button>
-            </form>
-          ) : (
-            <button type="button" className="grid h-11 w-11 place-items-center text-white" aria-label="Search events" onClick={() => setSearchOpen(true)}>
-              <Search size={18} />
-            </button>
-          )}
-          <Link href="/events" className={buttonClass("gold")}>
-            Explore Events
+        <div className="flex items-center gap-2">
+          <Link href="/tickets" className={`${buttonClass("gold")} !px-3 sm:!px-5`}>
+            <span className="sm:hidden">Tickets</span>
+            <span className="hidden sm:inline">Get Tickets</span>
           </Link>
+          <button
+            ref={buttonRef}
+            type="button"
+            className="grid h-11 w-11 place-items-center lg:hidden"
+            aria-expanded={open}
+            aria-controls={menuId}
+            onClick={() => setMenuPath(open ? null : pathname)}
+          >
+            <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+            {open ? <X size={20} aria-hidden /> : <Menu size={20} aria-hidden />}
+          </button>
         </div>
-        <button ref={buttonRef} type="button" className="grid h-11 w-11 place-items-center lg:hidden" aria-expanded={open} aria-controls={menuId} onClick={() => setMenuPath(open ? null : pathname)}>
-          <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
       </div>
-      {open ? (
-        <div ref={panelRef} id={menuId} className="border-t border-white/10 bg-navy px-4 py-6 lg:hidden">
-          <nav className="grid gap-2" aria-label="Mobile">
-            {links.map((link) => (
-              <Link key={link.href} href={link.href} className="border-b border-white/10 py-3 text-sm uppercase tracking-[0.16em]">
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-          <form action="/events" className="mt-5 grid gap-3">
-            <label className="text-xs uppercase tracking-[0.16em] text-mist" htmlFor="mobile-search">
-              Search
-            </label>
-            <input id="mobile-search" name="q" className="border border-white/20 bg-transparent px-3 py-3" />
-            <button className={buttonClass("secondary")} type="submit">
-              Search events
-            </button>
-          </form>
-          <Link href="/events" className={`${buttonClass("gold")} mt-4 w-full`}>
-            Explore Events
-          </Link>
-        </div>
-      ) : null}
+      {open && typeof document !== "undefined" ? createPortal(menu, document.body) : null}
     </header>
   );
 }

@@ -12,7 +12,7 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
   return (
     <div className="grid w-full max-w-md gap-8 bg-white p-8">
       <form action={action} className="grid gap-4">
-        <p className="text-xs font-semibold tracking-[0.18em] text-gold">WHY US</p>
+        <p className="text-xs font-semibold tracking-[0.18em] text-gold">Ahene Fia</p>
         <h1 className="font-display text-3xl text-navy">Administrator sign in</h1>
         <p className="text-sm leading-6 text-ink-soft">Attendee records stay in this private area.</p>
         {state.message ? <p role="alert" className="bg-red-50 px-4 py-3 text-sm text-red-900">{state.message}</p> : null}

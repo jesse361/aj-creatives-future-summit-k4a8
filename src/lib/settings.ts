@@ -24,21 +24,21 @@ export type PublicSettings = {
 };
 
 const fallback: PublicSettings = {
-  brandName: "WHY US",
-  legalName: "WHY US — Events & Conference Hub",
-  tagline: "Where Ideas Meet. Where Connections Begin.",
-  secondaryTagline: "Bringing People, Ideas, and Opportunities Together.",
+  brandName: "Ahene Fia",
+  legalName: "Ahene Fia — Events & Conference Hub",
+  tagline: "Where Vision Meets Experience.",
+  secondaryTagline: "Bringing ambitious minds together through extraordinary conferences, meaningful connections, and experiences that move ideas forward.",
   logoUrl: "",
   contactEmail: "",
   contactPhone: "",
   address: "",
   socialLinks: [],
   defaultCurrency: "GHS",
-  announcementEnabled: false,
-  announcement: "",
-  footerContent: "WHY US brings people, ideas, and opportunities together through conferences, summits, workshops, and private gatherings.",
-  seoTitle: "WHY US — Events & Conference Hub",
-  seoDescription: "Discover exceptional conferences, connect with inspiring people, and experience events designed to turn ideas into opportunities.",
+  announcementEnabled: true,
+  announcement: "The next chapter of connection starts here.",
+  footerContent: "Ahene Fia hosts conferences, summits, workshops, and private gatherings for people who want the room to matter.",
+  seoTitle: "Ahene Fia — Events & Conference Hub",
+  seoDescription: "Ahene Fia brings ambitious minds together through conferences, meaningful connections, and experiences that move ideas forward.",
   registrationHoldMinutes: 30,
 };
 

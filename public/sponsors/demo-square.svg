@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img">
+  <rect width="200" height="200" fill="#123D32"/>
+  <rect x="16" y="16" width="168" height="168" fill="none" stroke="#D6AD60" stroke-width="2"/>
+  <text x="100" y="108" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#F7F3EA">DEMO</text>
+</svg>

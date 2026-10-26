@@ -101,6 +101,19 @@ export function dayKey(iso: string, timeZone: string) {
   return `${pick("year")}-${pick("month")}-${pick("day")}`;
 }
 
+export function formatSummitRange(startIso: string, endIso: string, timeZone: string) {
+  const zone = safeTimeZone(timeZone);
+  const start = new Date(startIso);
+  const end = new Date(endIso);
+  if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime())) return "Date to be confirmed";
+  const month = (date: Date) => new Intl.DateTimeFormat("en-US", { timeZone: zone, month: "long" }).format(date);
+  const day = (date: Date) => new Intl.DateTimeFormat("en-US", { timeZone: zone, day: "numeric" }).format(date);
+  const year = (date: Date) => new Intl.DateTimeFormat("en-US", { timeZone: zone, year: "numeric" }).format(date);
+  if (month(start) === month(end) && year(start) === year(end)) return `${month(start)} ${day(start)}–${day(end)}, ${year(start)}`;
+  if (year(start) === year(end)) return `${month(start)} ${day(start)} – ${month(end)} ${day(end)}, ${year(start)}`;
+  return `${month(start)} ${day(start)}, ${year(start)} – ${month(end)} ${day(end)}, ${year(end)}`;
+}
+
 export function formatDateRange(startIso: string | null, endIso: string | null, timeZone: string) {
   if (!startIso) return "";
   const zone = safeTimeZone(timeZone);
